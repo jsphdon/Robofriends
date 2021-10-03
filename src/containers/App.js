@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import CardList from './CardList';
-// import {robots} from './robots';
-import SearchBox from './SearchBox';
+import CardList from '../components/CardList';
+import SearchBox from '../components/SearchBox';
+import Scroll from '../components/Scroll';
+import ErrorBoundary from '../components/ErrorBoundary';
 import './App.css';
 
 class App extends Component {
@@ -29,19 +30,25 @@ class App extends Component {
   }
 
   render(){
-    const filteredRobots = this.state.robots.filter(robots => { 
-      return robots.name.toLowerCase().includes(this.state.searchField.toLowerCase());
+    const {robots, searchField} = this.state;
+
+    const filteredRobots = robots.filter(robot => { 
+      return robot.name.toLowerCase().includes(searchField.toLowerCase());
     })
 
     // if the state is very slow, we can put an alert to users that it is loading
-    if (this.state.robots.length === 0){
+    if (!robots.length){
       return <h1>LOADING.....</h1>
     }else{  
           return(
       <div className="tc">
         <h1 className="f1">Robofriends</h1>
         <SearchBox searchChange={this.onSearchChange}/>
-        <CardList robots = {filteredRobots}/>
+        <Scroll>
+        <ErrorBoundary>
+          <CardList robots = {filteredRobots}/>
+        </ErrorBoundary>
+        </Scroll>
       </div>
       
     )
