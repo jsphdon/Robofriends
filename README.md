@@ -1,4 +1,4 @@
-# Instructions below are from 
+# Instructions below are from @aneagoie 's README.md file
 
 ## Getting Started with Create React App
 
