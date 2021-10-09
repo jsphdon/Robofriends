@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Instructions below are from @aneagoie 's README.md file
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
