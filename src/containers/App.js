@@ -1,36 +1,27 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import ErrorBoundary from '../components/ErrorBoundary';
 import './App.css';
 
-class App extends Component {
-  constructor(){
-    super()
-    this.state = { 
-      robots: [],
-      searchField: ''}
-  }
+function App (){
 
+  const [robots, setRobots] = useState([])
+  const [searchField, setSearchField] = useState('')
+  const [count, setCount] = useState(0)
 
-  
-  componentDidMount(){
+  useEffect(()=>{
     // Web API
     fetch('https://jsonplaceholder.typicode.com/users').then(response=>{
       return response.json();
-    }).then(users =>{
-      this.setState({robots: users});
-    })
-  }
+    }).then(users =>{setRobots(users)});
+    }, [count]) // only run if count changes
 
-  onSearchChange = (event) => {
+  const onSearchChange = (event) => {
     //this should give us the value in the console to what we type on the search field
-    this.setState({searchField: event.target.value })
+    setSearchField(event.target.value)
   }
-
-  render(){
-    const {robots, searchField} = this.state;
 
     const filteredRobots = robots.filter(robot => { 
       return robot.name.toLowerCase().includes(searchField.toLowerCase());
@@ -40,33 +31,19 @@ class App extends Component {
     if (!robots.length){
       return <h1>LOADING.....</h1>
     }else{  
-          return(
-      <div className="tc">
-        <h1 className="f1">Robofriends</h1>
-        <SearchBox searchChange={this.onSearchChange}/>
-        <Scroll>
-        <ErrorBoundary>
-          <CardList robots = {filteredRobots}/>
-        </ErrorBoundary>
-        </Scroll>
-      </div>
-      
+      return(
+        <div className="tc">
+          <h1 className="f1">Robofriends</h1>
+          <button onClick={()=>setCount(count+1)}>Click Me</button>
+          <SearchBox searchChange={onSearchChange}/>
+          <Scroll>
+          <ErrorBoundary>
+            <CardList robots = {filteredRobots}/>
+          </ErrorBoundary>
+          </Scroll>
+        </div>
     )
     }
-
-  }
 }
-
-// const App = () => {
-//   return(
-//     <div className="tc">
-//       <h1>Robofriends</h1>
-//       <SearchBox />
-//       <CardList robots = {robots}/>
-//     </div>
-    
-//   )
-  
-// }
 
 export default App
